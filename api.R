@@ -9,3 +9,9 @@ function() {
   "ok"
 }
 
+#* GitHub WebHook
+#* @post
+function(msg) {
+  cat(msg)
+  "ok"
+}
