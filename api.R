@@ -11,7 +11,8 @@ function() {
 
 #* GitHub WebHook
 #* @post /webhook
+#* @parser json
 function(req) {
-  str(req)
+  str(as.list(req$postBody))
   "ok"
 }
