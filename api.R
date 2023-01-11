@@ -13,6 +13,10 @@ function() {
 #* @post /webhook
 #* @parser json
 function(req) {
-  str(as.list(req$postBody))
-  "ok"
+  body <- jsonlite::fromJSON(req$postBody)
+
+  if (!"self-hosted" %in% workflow_job$labels)
+    return("ok")
+
+  return(body)
 }
