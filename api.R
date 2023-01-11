@@ -11,7 +11,7 @@ function() {
 
 #* GitHub WebHook
 #* @post /webhook
-function(msg) {
-  str(msg)
+function(req) {
+  str(req)
   "ok"
 }
