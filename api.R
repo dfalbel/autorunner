@@ -42,7 +42,7 @@ function(req) {
     instance_id <- paste0("gh", body$workflow_job$id,  body$workflow_job$run_id)
     cat("creating instace with id: ", instance_id, "\n")
     labels <- paste(body$workflow_job$labels[-1], collapse = ",")
-    res <- future::future(substitute = FALSE, {
+    res <- future::future({
       googleComputeEngineR::gce_vm(
         instance_id,
         image_project = "ubuntu-os-cloud",
@@ -65,7 +65,7 @@ function(req) {
     }
 
     cat("deleting instance with id: ", instance_id, "\n")
-    res <- future:future(substitute = FALSE, {
+    res <- future::future({
       googleComputeEngineR::gce_vm_delete(
         instances = instance_id,
         project = googleComputeEngineR::gce_get_global_project(),
