@@ -15,7 +15,7 @@ function() {
   "ok"
 }
 
-startup_script <- function(org, labels) {
+startup_script <- function(org, labels, gpu) {
   token <- gh::gh("POST /orgs/{org}/actions/runners/registration-token", org = org)
   glue::glue(
     readr::read_file("bootstrap.sh"),
