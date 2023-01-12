@@ -39,13 +39,13 @@ function(req) {
     instance_id <- paste0("gh-", body$workflow_job$id, "-",  body$workflow_job$run_id)
     cat("creating instace with id: ", instance_id, "\n")
     res <- future::future({
-      gce_vm(
+      googleComputeEngineR::gce_vm(
         instance_id,
         image_project = "ubuntu-os-cloud",
         image_family = "ubuntu-2204-lts",
         predefined_type = "n2-standard-2",
-        project = gce_get_global_project(),
-        zone = gce_get_global_zone(),
+        project = googleComputeEngineR::gce_get_global_project(),
+        zone = googleComputeEngineR::gce_get_global_zone(),
         metadata = list(
           "startup-script" = startup_script(org = "mlverse", labels = "gpug")
         )
@@ -54,8 +54,10 @@ function(req) {
   }
 
   if (body$action == "completed") {
+    instance_id <- body$workflow_job$runner_name
+    cat("deleting instance with id: ", instance_id)
     res <- future:future({
-      gce_vm_delete(body$workflow_job$runner_name)
+      googleComputeEngineR::gce_vm_delete(instance_id)
     })
   }
 
