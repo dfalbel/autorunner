@@ -33,7 +33,7 @@ function(req) {
   if (body$repository$name != "gh-actions-test")
     return("ok")
 
-  instance_id <- paste(body$workflow_job$id, "-",  body$workflow_job$run_id)
+  instance_id <- paste0("gh-", body$workflow_job$id, "-",  body$workflow_job$run_id)
 
   if (body$action == "queued") {
     gce_vm(
