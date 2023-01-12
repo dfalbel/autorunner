@@ -40,18 +40,23 @@ function(req) {
 
   if (body$action == "queued") {
     instance_id <- paste0("gh", body$workflow_job$id,  body$workflow_job$run_id)
+    gpu <- as.numeric("gpu" %in% body$workflow_job$labels)
     cat("creating instace with id: ", instance_id, "\n")
     labels <- paste(body$workflow_job$labels[-1], collapse = ",")
     res <- future::future({
       googleComputeEngineR::gce_vm(
         instance_id,
-        image_project = "ubuntu-os-cloud",
-        image_family = "ubuntu-2204-lts",
+        image_project = "cos-cloud",
+        image_family = "cos-101-lts",
         predefined_type = "n2-standard-2",
         project = googleComputeEngineR::gce_get_global_project(),
         zone = googleComputeEngineR::gce_get_global_zone(),
         metadata = list(
-          "startup-script" = startup_script(org = "mlverse", labels = labels)
+          "startup-script" = startup_script(
+            org = "mlverse",
+            labels = labels,
+            gpu = gpu
+          )
         ),
         scheduling = list(
           'preemptible' = TRUE
@@ -80,12 +85,3 @@ function(req) {
   cat("returning!", "\n")
   return(body)
 }
-
-f <- function() {
-  res <- future::future({
-    cat("hello world")
-    Sys.sleep(5)
-  })
-  return(1)
-}
-f()
