@@ -3,7 +3,7 @@
 adduser --disabled-password --gecos "" actions
 cd /home/actions
 
-if [ {gpu} ]
+if [ "{gpu}" == "1" ]
 then
   sudo cos-extensions install gpu
 fi
