@@ -56,9 +56,18 @@ function(req) {
 
   if (body$action == "completed") {
     instance_id <- as.character(body$workflow_job$runner_name, "\n")
+
+    if (is.null(instance_id)) {
+      return("nothing to delete")
+    }
+
     cat("deleting instance with id: ", instance_id)
     res <- future:future({
-      googleComputeEngineR::gce_vm_delete(instance_id)
+      googleComputeEngineR::gce_vm_delete(
+        instances = instance_id,
+        project = googleComputeEngineR::gce_get_global_project(),
+        zone = googleComputeEngineR::gce_get_global_zone()
+      )
     })
   }
 
