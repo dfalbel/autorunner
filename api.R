@@ -33,9 +33,8 @@ function(req) {
   if (body$repository$name != "gh-actions-test")
     return("ok")
 
-  instance_id <- paste0("gh-", body$workflow_job$id, "-",  body$workflow_job$run_id)
-
   if (body$action == "queued") {
+    instance_id <- paste0("gh-", body$workflow_job$id, "-",  body$workflow_job$run_id)
     gce_vm(
       instance_id,
       image_project = "ubuntu-os-cloud",
@@ -50,7 +49,7 @@ function(req) {
   }
 
   if (body$action == "completed") {
-    gce_vm_delete(instance_id)
+    gce_vm_delete(body$workflow_job$runner_name)
   }
 
   return(body)
