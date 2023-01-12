@@ -52,6 +52,9 @@ function(req) {
         zone = googleComputeEngineR::gce_get_global_zone(),
         metadata = list(
           "startup-script" = startup_script(org = "mlverse", labels = labels)
+        ),
+        scheduling = list(
+          'preemptible' = TRUE
         )
       )
     })
