@@ -48,7 +48,7 @@ function(req) {
         instance_id,
         image_project = "ubuntu-os-cloud",
         image_family = "ubuntu-2204-lts",
-        predefined_type = "n2-standard-2",
+        predefined_type = "n1-standard-4",
         project = googleComputeEngineR::gce_get_global_project(),
         zone = googleComputeEngineR::gce_get_global_zone(),
         metadata = list(
@@ -59,7 +59,7 @@ function(req) {
           )
         ),
         acceleratorCount = if (gpu) 1 else NULL,
-        acceleratorType = if (gpu) "nvidia-tesla-p4" else "",
+        acceleratorType = if (gpu) "nvidia-tesla-t4" else "",
         scheduling = list(
           'preemptible' = TRUE
         )
