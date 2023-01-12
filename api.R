@@ -1,5 +1,7 @@
 library(plumber)
 library(googleComputeEngineR)
+library(future)
+plan(multisession)
 
 #* @apiTitle Auto GH runner
 #* @apiDescription Manages GH runners.
@@ -35,21 +37,25 @@ function(req) {
 
   if (body$action == "queued") {
     instance_id <- paste0("gh-", body$workflow_job$id, "-",  body$workflow_job$run_id)
-    gce_vm(
-      instance_id,
-      image_project = "ubuntu-os-cloud",
-      image_family = "ubuntu-2204-lts",
-      predefined_type = "n2-standard-2",
-      project = gce_get_global_project(),
-      zone = gce_get_global_zone(),
-      metadata = list(
-        "startup-script" = startup_script(org = "mlverse", labels = "gpug")
+    res <- future::future({
+      gce_vm(
+        instance_id,
+        image_project = "ubuntu-os-cloud",
+        image_family = "ubuntu-2204-lts",
+        predefined_type = "n2-standard-2",
+        project = gce_get_global_project(),
+        zone = gce_get_global_zone(),
+        metadata = list(
+          "startup-script" = startup_script(org = "mlverse", labels = "gpug")
+        )
       )
-    )
+    })
   }
 
   if (body$action == "completed") {
-    gce_vm_delete(body$workflow_job$runner_name)
+    res <- future:future({
+      gce_vm_delete(body$workflow_job$runner_name)
+    })
   }
 
   return(body)

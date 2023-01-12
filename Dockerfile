@@ -1,5 +1,5 @@
 FROM rstudio/plumber
-RUN Rscript -e 'install.packages(c("googleComputeEngineR", "readr", "gh", "glue", "jsonlite"))'
+RUN Rscript -e 'install.packages(c("googleComputeEngineR", "readr", "gh", "glue", "jsonlite", "future"))'
 
 COPY api.R /
 COPY bootstrap.sh /
