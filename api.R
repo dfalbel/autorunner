@@ -58,6 +58,8 @@ function(req) {
             gpu = gpu
           )
         ),
+        acceleratorCount = if (gpu) 1 else NULL,
+        acceleratorType = if (gpu) "nvidia-tesla-p4" else "",
         scheduling = list(
           'preemptible' = TRUE
         )
