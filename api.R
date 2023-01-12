@@ -32,12 +32,13 @@ function(req) {
   if (!"self-hosted" %in% body$workflow_job$labels)
     return("ok")
 
-  if (body$repository$name != "gh-actions-test")
+  if (!"gce" %in% body$workflow_job$labels)
     return("ok")
 
   if (body$action == "queued") {
-    instance_id <- paste0("gh-", body$workflow_job$id, "-",  body$workflow_job$run_id)
     cat("creating instace with id: ", instance_id, "\n")
+    instance_id <- paste0("gh-", body$workflow_job$id, "-",  body$workflow_job$run_id)
+    labels <- paste(body$workflow_job$labels[-1], collapse = ",")
     res <- future::future({
       googleComputeEngineR::gce_vm(
         instance_id,
@@ -47,7 +48,7 @@ function(req) {
         project = googleComputeEngineR::gce_get_global_project(),
         zone = googleComputeEngineR::gce_get_global_zone(),
         metadata = list(
-          "startup-script" = startup_script(org = "mlverse", labels = "gpug")
+          "startup-script" = startup_script(org = "mlverse", labels = labels)
         )
       )
     })
