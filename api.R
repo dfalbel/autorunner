@@ -37,6 +37,7 @@ function(req) {
 
   if (body$action == "queued") {
     instance_id <- paste0("gh-", body$workflow_job$id, "-",  body$workflow_job$run_id)
+    cat("creating instace with id: ", instance_id, "\n")
     res <- future::future({
       gce_vm(
         instance_id,
@@ -58,5 +59,15 @@ function(req) {
     })
   }
 
+  cat("returning!", "\n")
   return(body)
 }
+
+f <- function() {
+  res <- future::future({
+    cat("hello world")
+    Sys.sleep(5)
+  })
+  return(1)
+}
+f()
