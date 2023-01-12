@@ -36,8 +36,8 @@ function(req) {
     return("ok")
 
   if (body$action == "queued") {
-    cat("creating instace with id: ", instance_id, "\n")
     instance_id <- paste0("gh-", body$workflow_job$id, "-",  body$workflow_job$run_id)
+    cat("creating instace with id: ", instance_id, "\n")
     labels <- paste(body$workflow_job$labels[-1], collapse = ",")
     res <- future::future({
       googleComputeEngineR::gce_vm(
@@ -55,7 +55,7 @@ function(req) {
   }
 
   if (body$action == "completed") {
-    instance_id <- body$workflow_job$runner_name
+    instance_id <- as.character(body$workflow_job$runner_name, "\n")
     cat("deleting instance with id: ", instance_id)
     res <- future:future({
       googleComputeEngineR::gce_vm_delete(instance_id)
