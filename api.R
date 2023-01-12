@@ -9,6 +9,9 @@ plan(multisession)
 #* Healtcheck
 #* @get /healthcheck
 function() {
+  future::future({
+    cat("healthcheck!", "\n")
+  })
   "ok"
 }
 
@@ -62,7 +65,7 @@ function(req) {
     }
 
     cat("deleting instance with id: ", instance_id, "\n")
-    res <- future:future({
+    res <- future:future(substitute = FALSE, {
       googleComputeEngineR::gce_vm_delete(
         instances = instance_id,
         project = googleComputeEngineR::gce_get_global_project(),
