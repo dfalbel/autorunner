@@ -42,7 +42,7 @@ function(req) {
     instance_id <- paste0("gh", body$workflow_job$id,  body$workflow_job$run_id)
     cat("creating instace with id: ", instance_id, "\n")
     labels <- paste(body$workflow_job$labels[-1], collapse = ",")
-    res <- future::future({
+    res <- future::future(substitute = FALSE, {
       googleComputeEngineR::gce_vm(
         instance_id,
         image_project = "ubuntu-os-cloud",
