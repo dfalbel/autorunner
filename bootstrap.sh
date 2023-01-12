@@ -5,7 +5,10 @@ cd /home/actions
 
 if [ "{gpu}" == "1" ]
 then
-  sudo cos-extensions install gpu
+  # GPU driver installation instructions from:
+  # https://cloud.google.com/compute/docs/gpus/install-drivers-gpu
+  curl https://raw.githubusercontent.com/GoogleCloudPlatform/compute-gpu-installation/main/linux/install_gpu_driver.py --output install_gpu_driver.py
+  sudo python3 install_gpu_driver.py
 fi
 
 sudo -u actions mkdir actions-runner && cd actions-runner

@@ -46,8 +46,8 @@ function(req) {
     res <- future::future({
       googleComputeEngineR::gce_vm(
         instance_id,
-        image_project = "cos-cloud",
-        image_family = "cos-101-lts",
+        image_project = "ubuntu-os-cloud",
+        image_family = "ubuntu-2204-lts",
         predefined_type = "n2-standard-2",
         project = googleComputeEngineR::gce_get_global_project(),
         zone = googleComputeEngineR::gce_get_global_zone(),
