@@ -9,9 +9,6 @@ plan(multisession)
 #* Healtcheck
 #* @get /healthcheck
 function() {
-  future::future({
-    cat("healthcheck!", "\n")
-  })
   "ok"
 }
 
