@@ -4,12 +4,9 @@ adduser --disabled-password --gecos "" actions
 cd /home/actions
 
 # install docker
-function install_docker () {
-  curl -fsSL https://get.docker.com -o get-docker.sh
-  sudo sh get-docker.sh
-}
 
-install_docker
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
 
 if [ "{gpu}" == "1" ]
 then
