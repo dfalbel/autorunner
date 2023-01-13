@@ -49,6 +49,7 @@ function(req) {
         image_project = "ubuntu-os-cloud",
         image_family = "ubuntu-2204-lts",
         predefined_type = "n1-standard-4",
+        disk_size_gb = 50,
         project = googleComputeEngineR::gce_get_global_project(),
         zone = googleComputeEngineR::gce_get_global_zone(),
         metadata = list(
