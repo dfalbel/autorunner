@@ -85,3 +85,8 @@ function(req) {
   cat("returning!", "\n")
   return(body)
 }
+
+#* Install the GPU drivers
+#*
+#* @assets ./driver /driver
+list()
