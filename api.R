@@ -90,3 +90,20 @@ function(req) {
 #*
 #* @assets ./driver /driver
 list()
+
+#* Request a script to bootstrap installation of GH actions stuff
+#*
+#* @get macbootstrap
+#* @serializer text
+function(req, key, labels) {
+  if (is.null(key) || key != Sys.getenv("GITHUB_PAT"))
+    return("not authorized")
+
+  token <- gh::gh("POST /orgs/{org}/actions/runners/registration-token", org = "mlverse")
+  glue::glue(
+    readr::read_file("bootstrap-macos.sh"),
+    org = "mlverse",
+    runner_token = token$token,
+    labels = labels
+  )
+}
