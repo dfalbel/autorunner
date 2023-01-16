@@ -1,4 +1,4 @@
-launchctl setenv PATH $PATH
+export PATH="$PATH:/opt/homebrew/bin:/opt/homebrew/sbin"
 
 echo $PATH
 echo $(which brew)
