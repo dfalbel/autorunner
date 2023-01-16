@@ -104,6 +104,7 @@ function(req, key, labels) {
     readr::read_file("bootstrap-macos.sh"),
     org = "mlverse",
     runner_token = token$token,
-    labels = labels
+    labels = labels,
+    name = paste(c("mac-", sample(letters, 10, replace=TRUE)), collapse="")
   )
 }
