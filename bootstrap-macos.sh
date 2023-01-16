@@ -1,4 +1,4 @@
-export PATH="$PATH:/opt/homebrew/bin:/opt/homebrew/sbin"
+export PATH="$PATH:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin"
 
 echo $PATH
 echo $(which brew)
