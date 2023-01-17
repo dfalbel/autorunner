@@ -4,10 +4,9 @@ adduser --disabled-password --gecos "" actions
 cd /home/actions
 
 # set self-destructing after 1 hour
-# we launch a detached process that will auto delete the instance
-export NAME=$(curl -X GET http://metadata.google.internal/computeMetadata/v1/instance/name -H 'Metadata-Flavor: Google')
-export ZONE=$(curl -X GET http://metadata.google.internal/computeMetadata/v1/instance/zone -H 'Metadata-Flavor: Google')
-$(sleep 3600; gcloud --quiet compute instances delete $NAME --zone=$ZONE) & disown
+# this will turn off the instance, but won't delete its disk, etc.
+# at least can avoid some costs.
+sudo shutdown -h +60
 
 # install docker
 curl -fsSL https://get.docker.com -o get-docker.sh
