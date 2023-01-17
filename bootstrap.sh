@@ -3,8 +3,13 @@
 adduser --disabled-password --gecos "" actions
 cd /home/actions
 
-# install docker
+# set self-destructing after 1 hour
+# we launch a detached process that will auto delete the instance
+export NAME=$(curl -X GET http://metadata.google.internal/computeMetadata/v1/instance/name -H 'Metadata-Flavor: Google')
+export ZONE=$(curl -X GET http://metadata.google.internal/computeMetadata/v1/instance/zone -H 'Metadata-Flavor: Google')
+$(sleep 3600; gcloud --quiet compute instances delete $NAME --zone=$ZONE) & disown
 
+# install docker
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
 
