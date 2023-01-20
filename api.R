@@ -32,11 +32,12 @@ function(req) {
   if (!"self-hosted" %in% body$workflow_job$labels)
     return("ok")
 
-  if (!"gce" %in% body$workflow_job$labels)
-    return("ok")
-
   if (body$action == "queued") {
-    instance_id <- paste0("gh", body$workflow_job$id,  body$workflow_job$run_id)
+
+    if (!"gce" %in% body$workflow_job$labels)
+      return("ok")
+
+    instance_id <- paste0("ghgce-", body$workflow_job$id, "-",  body$workflow_job$run_id)
     gpu <- as.numeric("gpu" %in% body$workflow_job$labels)
     cat("creating instace with id: ", instance_id, "\n")
     labels <- paste(body$workflow_job$labels[-1], collapse = ",")
@@ -70,6 +71,10 @@ function(req) {
 
     if (is.null(instance_id)) {
       return("nothing to delete")
+    }
+
+    if (!grepl("ghgce", instance_id)) {
+      return("not gce allocated instance")
     }
 
     cat("deleting instance with id: ", instance_id, "\n")
