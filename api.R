@@ -22,6 +22,35 @@ startup_script <- function(org, labels, gpu) {
   )
 }
 
+start_gce_vm <- function(instance_id, labels, gpu) {
+  googleComputeEngineR::gce_vm(
+    instance_id,
+    image_project = "ubuntu-os-cloud",
+    image_family = "ubuntu-2204-lts",
+    predefined_type = "n1-standard-4",
+    disk_size_gb = 90,
+    project = googleComputeEngineR::gce_get_global_project(),
+    zone = googleComputeEngineR::gce_get_global_zone(),
+    metadata = list(
+      "startup-script" = startup_script(
+        org = "mlverse",
+        labels = labels,
+        gpu = gpu
+      )
+    ),
+    acceleratorCount = if (gpu) 1 else NULL,
+    acceleratorType = if (gpu) "nvidia-tesla-t4" else "",
+    scheduling = list(
+      'preemptible' = TRUE
+    )
+  )
+}
+
+insist_start_gce_vm <- purrr::insistently(
+  start_gce_vm,
+  rate = purrr::rate_backoff(pause_base = 15, pause_cap = 3000, pause_min = 60),
+  quiet = FALSE
+)
 
 #* GitHub WebHook
 #* @post /webhook
@@ -38,31 +67,14 @@ function(req) {
       return("ok")
 
     instance_id <- paste0("ghgce-", body$workflow_job$id, "-",  body$workflow_job$run_id)
+    # add some more randomstuff to the instance name to avoid collisions.
+    instance_id <- paste0(instance_id, "-", paste0(sample(letters, 10, replace=TRUE), collapse = ""))
+
     gpu <- as.numeric("gpu" %in% body$workflow_job$labels)
     cat("creating instace with id: ", instance_id, "\n")
     labels <- paste(body$workflow_job$labels[-1], collapse = ",")
     res <- future::future({
-      googleComputeEngineR::gce_vm(
-        instance_id,
-        image_project = "ubuntu-os-cloud",
-        image_family = "ubuntu-2204-lts",
-        predefined_type = "n1-standard-4",
-        disk_size_gb = 90,
-        project = googleComputeEngineR::gce_get_global_project(),
-        zone = googleComputeEngineR::gce_get_global_zone(),
-        metadata = list(
-          "startup-script" = startup_script(
-            org = "mlverse",
-            labels = labels,
-            gpu = gpu
-          )
-        ),
-        acceleratorCount = if (gpu) 1 else NULL,
-        acceleratorType = if (gpu) "nvidia-tesla-t4" else "",
-        scheduling = list(
-          'preemptible' = TRUE
-        )
-      )
+      insist_start_gce_vm(instance_id, labels, gpu)
     })
   }
 
