@@ -125,3 +125,11 @@ function(req, key, labels) {
     name = paste(c("mac-", sample(letters, 10, replace=TRUE)), collapse="")
   )
 }
+
+#* Start a new runner with specified options
+#*
+#* @get start_runner
+function(instance_id, labels, gpu) {
+  gpu <- as.numeric(gpu)
+  start_gce_vm(instance_id, labels, gpu)
+}
