@@ -1,7 +1,7 @@
 library(plumber)
 library(googleComputeEngineR)
 library(future)
-source("../task.R", local = TRUE)
+source("task.R", local = TRUE)
 plan(multisession)
 
 #* @apiTitle Auto GH runner
