@@ -128,7 +128,7 @@ function(req, key, labels) {
 
 #* Start a new runner with specified options
 #*
-#* @get start_runner
+#* @post start_runner
 function(instance_id, labels, gpu) {
   gpu <- as.numeric(gpu)
   start_gce_vm(instance_id, labels, gpu)
