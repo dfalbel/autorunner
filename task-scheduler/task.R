@@ -25,7 +25,7 @@ cloud_tasks_request <- function(..., method) {
 }
 
 
-tasks_list() <- function() {
+tasks_list <- function() {
   cloud_tasks_request(method = "GET")
 }
 
