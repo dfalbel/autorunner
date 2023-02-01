@@ -12,6 +12,10 @@ if (1 -eq $gpu) {
 ### Install Chocolatey
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
+# enable global confirmation so you don't have to confirm stuff when installing
+# with choco.
+choco feature enable -n=allowGlobalConfirmation
+
 ### Install GH Actions runner
 
 # Create a folder under the drive root
