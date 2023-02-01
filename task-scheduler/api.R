@@ -27,18 +27,25 @@ function(req) {
     if (!"gce" %in% body$workflow_job$labels)
       return("ok")
 
-    instance_id <- paste0("ghgce-", body$workflow_job$id, "-",  body$workflow_job$run_id)
-    # add some more randomstuff to the instance name to avoid collisions.
-    instance_id <- paste0(instance_id, "-", paste0(sample(letters, 10, replace=TRUE), collapse = ""))
-
     gpu <- as.numeric("gpu" %in% body$workflow_job$labels)
-    cat("creating instace with id: ", instance_id, "\n")
     labels <- paste(body$workflow_job$labels[-1], collapse = ",")
+
+    if (grepl("windows", labels)) {
+      # windows instance names won't keep more than 15 characters thus we
+      # create just a random name with maximum 15 characters
+      instance_id <- paste0("ghgce-", paste0(sample(letters, 9), collapse=""))
+    } else {
+      instance_id <- paste0("ghgce-", body$workflow_job$id, "-",  body$workflow_job$run_id)
+      # add some more randomstuff to the instance name to avoid collisions.
+      instance_id <- paste0(instance_id, "-", paste0(sample(letters, 10, replace=TRUE), collapse = ""))
+    }
+
+    cat("creating instace with id: ", instance_id, "\n")
     return(tasks_create_vm(instance_id, labels, gpu))
   }
 
   if (body$action == "completed") {
-    instance_id <- as.character(body$workflow_job$runner_name)
+    instance_id <- tolower(as.character(body$workflow_job$runner_name))
 
     if (is.null(instance_id)) {
       return("nothing to delete")
