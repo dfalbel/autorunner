@@ -15,7 +15,7 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManage
 ### Install GH Actions runner
 
 # Create a folder under the drive root
-cd C:\
+cd C://
 
 mkdir actions-runner; cd actions-runner
 # Download the latest runner package
@@ -28,8 +28,6 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem ; [System.IO.Compression
 ## Start the runner
 
 # Create the runner and start the configuration experience
-./config.cmd --url https://github.com/<org> --token <runner_token> --ephemeral --labels <labels> --unattended
+./config.cmd --url https://github.com/<org> --token <runner_token> --ephemeral --labels <labels> --unattended --runasservice
 # Run it!
-./svc.cmd install
-./svc.cmd start
-./run.cmd status
+Start-Service "actions.runner.*"
