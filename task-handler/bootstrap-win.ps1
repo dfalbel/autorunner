@@ -14,7 +14,7 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManage
 
 # enable global confirmation so you don't have to confirm stuff when installing
 # with choco.
-choco feature enable -n=allowGlobalConfirmation
+choco feature enable -n allowGlobalConfirmation
 
 ### Install GH Actions runner
 
