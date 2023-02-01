@@ -28,6 +28,6 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem ; [System.IO.Compression
 ## Start the runner
 
 # Create the runner and start the configuration experience
-./config.cmd --url https://github.com/<org> --token <runner_token> --ephemeral --labels <labels> --unattended --runasservice
+./config.cmd --url https://github.com/<org> --token <runner_token> --ephemeral --labels <labels> --unattended
 # Run it!
-Start-Service "actions.runner.*"
+./run.cmd
