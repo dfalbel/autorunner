@@ -93,7 +93,7 @@ start_gce_vm <- function(instance_id, labels, gpu) {
     ))
   )
 
-  if (grepl(out, "ZONE_RESOURCE_POOL_EXHAUSTED_WITH_DETAILS")) {
+  if (any(grepl("ZONE_RESOURCE_POOL_EXHAUSTED_WITH_DETAILS", out))) {
     stop("Could not start the VM. THe zone doesn't have the resouce. Try again in a few minutes.")
   }
 
