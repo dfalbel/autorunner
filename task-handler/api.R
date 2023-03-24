@@ -75,19 +75,29 @@ start_gce_vm <- function(instance_id, labels, gpu) {
     gpu = gpu
   ))
 
-  googleComputeEngineR::gce_vm(
-    instance_id,
-    image_project = image_project,
-    image_family = image_family,
-    predefined_type = "n1-standard-4",
-    disk_size_gb = 90,
-    project = googleComputeEngineR::gce_get_global_project(),
-    zone = googleComputeEngineR::gce_get_global_zone(),
-    metadata = metadata,
-    acceleratorCount = if (gpu) 1 else NULL,
-    acceleratorType = if (gpu) "nvidia-tesla-t4" else "",
-    scheduling = list(
-      'preemptible' = TRUE
-    )
+  out <- capture.output(
+    x <- try(googleComputeEngineR::gce_vm(
+      instance_id,
+      image_project = image_project,
+      image_family = image_family,
+      predefined_type = "n1-standard-4",
+      disk_size_gb = 90,
+      project = googleComputeEngineR::gce_get_global_project(),
+      zone = googleComputeEngineR::gce_get_global_zone(),
+      metadata = metadata,
+      acceleratorCount = if (gpu) 1 else NULL,
+      acceleratorType = if (gpu) "nvidia-tesla-t4" else "",
+      scheduling = list(
+        'preemptible' = TRUE
+      )
+    ))
   )
+
+  if (grepl(out, "ZONE_RESOURCE_POOL_EXHAUSTED_WITH_DETAILS")) {
+    stop("Could not start the VM. THe zone doesn't have the resouce. Try again in a few minutes.")
+  }
+
+  if (inherits(x, "try-error")) {
+    stop("Unknown error when starting the VM.")
+  }
 }
