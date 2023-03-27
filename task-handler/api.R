@@ -59,6 +59,24 @@ startup_script <- function(org, labels, gpu) {
   out
 }
 
+shutdown_script <- function(instance_id, labels, gpu) {
+  meta_name <- "shutdown-script"
+  shutdown <- readr::read_file("shutdown.sh")
+  glue_open <- "<"
+  glue_close <- ">"
+
+  out <- list()
+  out[[meta_name]] <- glue::glue(
+    shutdown,
+    instance_id = instance_id,
+    labels = labels,
+    gpu = gpu,
+    .open = glue_open,
+    .close = glue_close
+  )
+  out
+}
+
 start_gce_vm <- function(instance_id, labels, gpu) {
   if (grepl("windows", labels)) {
     image_project <- "windows-cloud"
@@ -71,6 +89,11 @@ start_gce_vm <- function(instance_id, labels, gpu) {
   metadata <- list()
   metadata <- append(metadata, startup_script(
     org = "mlverse",
+    labels = labels,
+    gpu = gpu
+  ))
+  metadata <- append(metadata, shutdown_script(
+    instance_id = instance_id,
     labels = labels,
     gpu = gpu
   ))
