@@ -69,7 +69,7 @@ shutdown_script <- function(instance_id, labels, gpu) {
   out[[meta_name]] <- glue::glue(
     shutdown,
     instance_id = instance_id,
-    labels = labels,
+    labels = sub(",", "%2C", labels),
     gpu = gpu,
     .open = glue_open,
     .close = glue_close

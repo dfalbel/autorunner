@@ -74,14 +74,18 @@ function(instance_id, labels, gpu) {
   runners <- gh::gh("GET /orgs/{org}/actions/runners", org = "mlverse")
   names <- sapply(runners$runners, function(x) x$name)
 
+  message("Sending task to delete instance")
+  tasks_delete_vm(instance_id)
   # runner was already activated. process that it was handling will fail
   # and there's nothing we can do
-  if (instance_id %in% names)
+  if (instance_id %in% names) {
+    message("instance_id is registered on GitHub. Nothing to do.")
     return("runner-activated")
+  }
 
-  # runner wasn't activated yet. we can delete the current instance and
-  # start a new instance
-  tasks_delete_vm(instance_id)
-  tasks_create_vm(instance_id, labels, gpu)
+
+  # runner wasn't activated yet. we can start a new instance
+  message("Sending task to create new instance")
+  tasks_create_vm(instance_id, labels, as.numeric(gpu))
 }
 
