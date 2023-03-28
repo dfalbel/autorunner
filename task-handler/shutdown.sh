@@ -5,7 +5,7 @@ PREEMPTED=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/pr
 echo "Preempred: $PREEMPTED"
 
 # if the VM is shutdown because it was preempted
-if [ "$PREEMPTED" == "TRUE" ]
+if [ "$PREEMPTED" != "FALSE" ]
 then
 # if the machine is turned off, we send a request to the API with the information
 # necessary to re-create the VM
