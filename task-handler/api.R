@@ -27,6 +27,17 @@ function(instance_id) {
   )
 }
 
+#* Stop VM
+#*
+#* @post vm_stop
+function(instance_id) {
+  googleComputeEngineR::gce_vm_stop(
+    instances = instance_id,
+    project = googleComputeEngineR::gce_get_global_project(),
+    zone = googleComputeEngineR::gce_get_global_zone()
+  )
+}
+
 #* Install the GPU drivers
 #*
 #* @assets ./driver /driver

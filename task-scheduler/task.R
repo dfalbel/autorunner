@@ -48,6 +48,23 @@ tasks_create_vm <- function(instance_id, labels, gpu) {
   )
 }
 
+tasks_stop_vm <- function(instance_id) {
+  cloud_tasks_request(
+    method = "POST",
+    body = list(
+      task = list(
+        httpRequest = list(
+          url = paste0(Sys.getenv("SERVICE_URL"), "vm_stop"),
+          httpMethod = "POST",
+          body = openssl::base64_encode(jsonlite::toJSON(auto_unbox = TRUE, list(
+            instance_id = instance_id
+          )))
+        )
+      )
+    )
+  )
+}
+
 tasks_delete_vm <- function(instance_id) {
   cloud_tasks_request(
     method = "POST",

@@ -55,8 +55,10 @@ function(req) {
       return("not gce allocated instance")
     }
 
-    cat("deleting instance with id: ", instance_id, "\n")
-    return(tasks_delete_vm(instance_id))
+    cat("sopping instance with id: ", instance_id, "\n")
+    # stoppping the VM will cause it to run the shutdown script which in turn
+    # deletes the VM.
+    return(tasks_stop_vm(instance_id))
   }
 
   cat("returning!", "\n")
@@ -75,12 +77,12 @@ function(instance_id, labels, gpu, actions) {
   # runner was already activated. process that it was handling will fail
   # and there's nothing we can do
   if (as.numeric(actions)) {
-    message("instance_id is registered on GitHub. Nothing to do.")
+    message("instance_id is deleted and we can't do anything else")
     return("runner-activated")
   }
 
   # runner wasn't activated yet. we can start a new instance
-  message("Sending task to create new instance")
+  message("Sending task to create new instance with similar config")
   tasks_create_vm(instance_id, labels, as.numeric(gpu))
 }
 
