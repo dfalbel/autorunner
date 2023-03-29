@@ -68,21 +68,16 @@ function(req) {
 #* Handles preemptible termination
 #* @post preemptible
 #* @parser json
-function(instance_id, labels, gpu) {
-
-  # try to figure out if runner is already registered and active
-  runners <- gh::gh("GET /orgs/{org}/actions/runners", org = "mlverse")
-  names <- sapply(runners$runners, function(x) x$name)
+function(instance_id, labels, gpu, actions) {
 
   message("Sending task to delete instance")
   tasks_delete_vm(instance_id)
   # runner was already activated. process that it was handling will fail
   # and there's nothing we can do
-  if (instance_id %in% names) {
+  if (as.numeric(actions)) {
     message("instance_id is registered on GitHub. Nothing to do.")
     return("runner-activated")
   }
-
 
   # runner wasn't activated yet. we can start a new instance
   message("Sending task to create new instance")
