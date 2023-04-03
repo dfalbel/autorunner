@@ -6,7 +6,7 @@ cd /home/actions
 # set self-destructing after 1 hour
 # this will turn off the instance, but won't delete its disk, etc.
 # at least can avoid some costs.
-sudo shutdown -h +90
+sudo shutdown -h +120
 
 # install docker
 curl -fsSL https://get.docker.com -o get-docker.sh
