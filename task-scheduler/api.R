@@ -55,10 +55,10 @@ function(req) {
       return("not gce allocated instance")
     }
 
-    cat("sopping instance with id: ", instance_id, "\n")
+    cat("stopping instance with id: ", instance_id, "\n")
     # stoppping the VM will cause it to run the shutdown script which in turn
     # deletes the VM.
-    return(tasks_stop_vm(instance_id))
+    return(tasks_delete_vm(instance_id))
   }
 
   cat("returning!", "\n")
