@@ -23,7 +23,7 @@ from datetime import datetime
 from enum import Enum, auto
 from typing import Optional
 
-DRIVER_URL = "https://us.download.nvidia.com/tesla/525.60.13/NVIDIA-Linux-x86_64-525.60.13.run"
+DRIVER_URL = "https://us.download.nvidia.com/tesla/525.105.17/NVIDIA-Linux-x86_64-525.105.17.run"
 K80_DRIVER_URL = "https://us.download.nvidia.com/tesla/470.103.01/NVIDIA-Linux-x86_64-470.103.01.run"
 
 TESLA_K80_DEVICE_CODE = "10de:102d"
