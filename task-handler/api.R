@@ -1,6 +1,7 @@
 library(plumber)
 library(googleComputeEngineR)
 library(future)
+source("pushover.R")
 
 #* Healtcheck
 #* @get /healthcheck
@@ -12,6 +13,7 @@ function() {
 #*
 #* @post vm_create
 function(instance_id, labels, gpu) {
+  pushover("[HANDLER] -> CREATE", "instance_id: ", instance_id)
   gpu <- as.numeric(gpu)
   start_gce_vm(instance_id, labels, gpu)
 }
@@ -20,22 +22,26 @@ function(instance_id, labels, gpu) {
 #*
 #* @post vm_delete
 function(instance_id) {
+  pushover("[HANDLER] -> DELETE", "instance_id: ", instance_id)
   googleComputeEngineR::gce_vm_delete(
     instances = instance_id,
     project = googleComputeEngineR::gce_get_global_project(),
     zone = googleComputeEngineR::gce_get_global_zone()
   )
+  pushover("[HANDLER] DELETE!", "instance_id: ", instance_id)
 }
 
 #* Stop VM
 #*
 #* @post vm_stop
 function(instance_id) {
+  pushover("[HANDLER] -> STOP", "instance_id: ", instance_id)
   googleComputeEngineR::gce_vm_stop(
     instances = instance_id,
     project = googleComputeEngineR::gce_get_global_project(),
     zone = googleComputeEngineR::gce_get_global_zone()
   )
+  pushover("[HANDLER] STOP!", "instance_id: ", instance_id)
 }
 
 #* Install the GPU drivers
@@ -128,10 +134,23 @@ start_gce_vm <- function(instance_id, labels, gpu) {
   )
 
   if (any(grepl("ZONE_RESOURCE_POOL_EXHAUSTED_WITH_DETAILS", out))) {
+    pushover(
+      "[HANDLER] CREATE FAIL! No resources",
+      paste0("No resources available. instance_id: ", instance_id, " gpu: ", gpu, " labels: ", labels)
+    )
     stop("Could not start the VM. THe zone doesn't have the resouce. Try again in a few minutes.")
   }
 
   if (inherits(x, "try-error")) {
+    pushover(
+      "[HANDLER] CREATE FAIL! Unknown",
+      paste0("Unknown error starting VM. instance_id: ", instance_id, " gpu: ", gpu, " labels: ", labels)
+    )
     stop("Unknown error when starting the VM.")
   }
+
+  pushover(
+    "[HANDLER] CREATE Instance created!",
+    paste0("Instance successfuly created. instance_id: ", instance_id, " gpu: ", gpu, " labels: ", labels)
+  )
 }
