@@ -34,6 +34,7 @@ tasks_create_vm <- function(instance_id, labels, gpu) {
     method = "POST",
     body = list(
       task = list(
+        name = paste0("create-", instance_id),
         httpRequest = list(
           url = paste0(Sys.getenv("SERVICE_URL"), "vm_create"),
           httpMethod = "POST",
@@ -53,6 +54,7 @@ tasks_stop_vm <- function(instance_id) {
     method = "POST",
     body = list(
       task = list(
+        name = paste0("stop-", instance_id),
         httpRequest = list(
           url = paste0(Sys.getenv("SERVICE_URL"), "vm_stop"),
           httpMethod = "POST",
@@ -70,6 +72,7 @@ tasks_delete_vm <- function(instance_id) {
     method = "POST",
     body = list(
       task = list(
+        name = paste0("delete-", instance_id),
         httpRequest = list(
           url = paste0(Sys.getenv("SERVICE_URL"), "vm_delete"),
           httpMethod = "POST",
