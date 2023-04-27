@@ -2,6 +2,7 @@ library(plumber)
 library(googleComputeEngineR)
 library(future)
 source("task.R", local = TRUE)
+source("pushover.R", local = TRUE)
 plan(multisession)
 
 #* @apiTitle Auto GH runner
@@ -41,6 +42,10 @@ function(req) {
     }
 
     cat("creating instace with id: ", instance_id, "\n")
+    pushover(
+      "[SCHEDULER] Creating instance!",
+      paste0("instance_id: ", instance_id, "gpu: ", gpu, "labels: ", labels)
+    )
     return(tasks_create_vm(instance_id, labels, gpu))
   }
 
@@ -56,6 +61,10 @@ function(req) {
     }
 
     cat("stopping instance with id: ", instance_id, "\n")
+    pushover(
+      "[SCHEDULER] Deleting instance!",
+      paste0("instance_id: ", instance_id)
+    )
     # stoppping the VM will cause it to run the shutdown script which in turn
     # deletes the VM.
     return(tasks_delete_vm(instance_id))
@@ -73,16 +82,28 @@ function(req) {
 function(instance_id, labels, gpu, actions) {
 
   message("Sending task to delete instance")
+  pushover(
+    "[SCHEDULER] Preemptible termination",
+    paste0("instance_id: ", instance_id, "gpu: ", gpu, "labels: ", labels)
+  )
   tasks_delete_vm(instance_id)
   # runner was already activated. process that it was handling will fail
   # and there's nothing we can do
   if (as.numeric(actions)) {
     message("instance_id is deleted and we can't do anything else")
+    pushover(
+      "[SCHEDULER] Preemptible termination - nothing to do",
+      paste0("instance_id: ", instance_id, "gpu: ", gpu, "labels: ", labels)
+    )
     return("runner-activated")
   }
 
   # runner wasn't activated yet. we can start a new instance
   message("Sending task to create new instance with similar config")
+  pushover(
+    "[SCHEDULER] Preemptible termination - schedule new instance",
+    paste0("instance_id: ", instance_id, "gpu: ", gpu, "labels: ", labels)
+  )
   tasks_create_vm(instance_id, labels, as.numeric(gpu))
 }
 
