@@ -98,16 +98,25 @@ source_image_from_config <- function(instance_id, labels, gpu) {
 
 metadata_from_config <- function(instance_id, labels, gpu) {
   metadata <- list()
-  metadata <- append(metadata, startup_script(
+  metadata$items <- list()
+
+  startup <- startup_script(
     org = "mlverse",
     labels = labels,
     gpu = gpu
-  ))
-  metadata <- append(metadata, shutdown_script(
+  )
+
+  metadata$items <- append(metadata$items, list(list(key = names(startup), value = startup[[1]])))
+
+  shutdown <- shutdown_script(
     instance_id = instance_id,
     labels = labels,
     gpu = gpu
-  ))
+  )
+
+  metadata$items <- append(metadata$items, list(list(key = names(shutdown), value = shutdown[[1]])))
+
+  metadata
 }
 
 accelerator_type_from_config <- function(accelerator) {
