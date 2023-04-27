@@ -99,8 +99,13 @@ start_gce_vm <- function(instance_id, labels, gpu) {
     image_project <- "windows-cloud"
     image_family <- "windows-2019"
   } else {
-    image_project <- "ubuntu-os-cloud"
-    image_family <- "ubuntu-2204-lts"
+    if (!gpu) {
+      image_project <- "ubuntu-os-cloud"
+      image_family <- "ubuntu-2204-lts"
+    } else {
+      image_project <- googleComputeEngineR::gce_get_global_project()
+      image_family <- "gpu-docker"
+    }
   }
 
   metadata <- list()
