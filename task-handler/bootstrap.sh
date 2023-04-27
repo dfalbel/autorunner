@@ -10,6 +10,8 @@ sudo shutdown -h +120
 
 if [ "{gpu}" == "1" ]
 then
+  echo "Hello GPU"
+  #echo "GPU - no need to install anything."
   # # install docker
   # curl -fsSL https://get.docker.com -o get-docker.sh
   # sudo sh get-docker.sh
