@@ -13,7 +13,7 @@ function() {
 #*
 #* @post vm_create
 function(instance_id, labels, gpu) {
-  pushover("[HANDLER] -> CREATE", "instance_id: ", instance_id)
+  pushover("[HANDLER] -> CREATE", paste0("instance_id: ", instance_id))
   gpu <- as.numeric(gpu)
   start_gce_vm(instance_id, labels, gpu)
 }
@@ -22,26 +22,26 @@ function(instance_id, labels, gpu) {
 #*
 #* @post vm_delete
 function(instance_id) {
-  pushover("[HANDLER] -> DELETE", "instance_id: ", instance_id)
+  pushover("[HANDLER] -> DELETE", paste0("instance_id: ", instance_id))
   googleComputeEngineR::gce_vm_delete(
     instances = instance_id,
     project = googleComputeEngineR::gce_get_global_project(),
     zone = googleComputeEngineR::gce_get_global_zone()
   )
-  pushover("[HANDLER] DELETE!", "instance_id: ", instance_id)
+  pushover("[HANDLER] DELETE!", paste0("instance_id: ", instance_id))
 }
 
 #* Stop VM
 #*
 #* @post vm_stop
 function(instance_id) {
-  pushover("[HANDLER] -> STOP", "instance_id: ", instance_id)
+  pushover("[HANDLER] -> STOP", paste0("instance_id: ", instance_id))
   googleComputeEngineR::gce_vm_stop(
     instances = instance_id,
     project = googleComputeEngineR::gce_get_global_project(),
     zone = googleComputeEngineR::gce_get_global_zone()
   )
-  pushover("[HANDLER] STOP!", "instance_id: ", instance_id)
+  pushover("[HANDLER] STOP!", paste0("instance_id: ", instance_id))
 }
 
 #* Install the GPU drivers
