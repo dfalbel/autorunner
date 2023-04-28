@@ -49,7 +49,12 @@ instance_from_config <- function(name, ..., .sourceImage = NULL, .machineType = 
     ),
     networkInterfaces = list(
       list(
-        subnetwork = .subnetwork
+        subnetwork = .subnetwork,
+        accessConfigs = list(
+          list(
+            type = "ONE_TO_ONE_NAT"
+          )
+        )
       )
     ),
     machineType = .machineType
