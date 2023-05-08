@@ -27,7 +27,7 @@ function(instance_id) {
   out <- vm_delete(instance_id)
 
   if (is.null(out$error)) {
-    msg <- list(severity = "NOTICE", message = "Successfully created VM", component = out)
+    msg <- list(severity = "NOTICE", message = "Successfully deleted VM", component = out)
     cat(jsonlite::toJSON(msg, auto_unbox = TRUE), "\n")
     return(out)
   }
