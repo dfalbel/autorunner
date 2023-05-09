@@ -31,7 +31,7 @@ instance_from_config <- function(name, ..., .sourceImage = NULL, .machineType = 
     .sourceImage <- "projects/ubuntu-os-cloud/global/images/ubuntu-2204-jammy-v20230425"
   }
   if (is.null(.machineType)) {
-    .machineType <- glue::glue("zones/{ZONE_ID}/machineTypes/n1-standard-1")
+    .machineType <- glue::glue("zones/{ZONE_ID}/machineTypes/n1-standard-4")
   }
 
   .subnetwork <- glue::glue("projects/{PROJECT_ID}/regions/{REGION_ID}/subnetworks/default")

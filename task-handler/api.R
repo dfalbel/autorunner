@@ -73,7 +73,6 @@ start_gce_vm <- function(instance_id, labels, gpu) {
   out <- vm_insert(
     name = instance_id,
     .sourceImage = source_image,
-    .machineType = "n1-standard-4",
     !!!args
   )
 
