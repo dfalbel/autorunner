@@ -43,6 +43,7 @@ instance_from_config <- function(name, ..., .sourceImage = NULL, .machineType = 
         boot = TRUE,
         initializeParams = list(
           diskSizeGb = "120",
+          autoDelete = TRUE,
           sourceImage = .sourceImage
         )
       )
